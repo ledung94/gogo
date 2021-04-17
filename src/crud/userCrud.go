@@ -65,6 +65,29 @@ func CreateUser(w http.ResponseWriter, r *http.Request){
 	json.NewEncoder(w).Encode(&user)
 }
 /*
+func Login(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Content-Type","application/json")
+	var user User
+	json.NewDecoder(r.Body).Decode(&user)
+	err := conn.Db.Where("username = ? AND password = ?",user.Username,user.Password).First(&user).Error
+	if err != nil {
+		panic("This account is not existed")
+	} else {
+		json.NewEncoder(w).Encode("Successfully login!")
+	}
+}
+*/
+func Login(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Content-Type","application/json")
+	var user User
+	err := conn.Db.Where("username = ? AND password = ?",r.FormValue("username"),r.FormValue("password")).First(&user).Error
+	if err != nil {
+		panic("This account is not existed")
+	} else {
+		json.NewEncoder(w).Encode("Successfully login! Hello " + user.Username)
+	}
+}
+/*
 func CreateUser(users []User) {
 	
 	for index := range users {
